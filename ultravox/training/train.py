@@ -107,8 +107,12 @@ def train(args: config_base.TrainConfig):
         )
 
     logging.info("Instantiating processor...")
+    #text_tokenizer: transformers.PreTrainedTokenizerFast = (
+    #    transformers.AutoTokenizer.from_pretrained(args.text_model)
+    #)
+    
     text_tokenizer: transformers.PreTrainedTokenizerFast = (
-        transformers.AutoTokenizer.from_pretrained(args.text_model)
+        transformers.AutoTokenizer.from_pretrained("khalidalt/acegpt-8b-chat-tokenizer")
     )
     text_tokenizer.padding_side = "right"
     text_tokenizer.pad_token = text_tokenizer.eos_token
