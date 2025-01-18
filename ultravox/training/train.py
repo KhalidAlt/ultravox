@@ -61,6 +61,9 @@ def prepare_dataset(
 
 
 def main() -> None:
+        
+    import nltk
+    nltk.download('punkt_tab')
     # Disable parallelism to avoid deadlocks in DataLoader, apparently
     # multiple processes are forked when using multiple datasets.
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
