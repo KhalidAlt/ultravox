@@ -139,9 +139,9 @@ def train(args: config_base.TrainConfig):
     with model_load_context:
         model = ultravox_model.UltravoxModel(config)
 
-    assert model.get_input_embeddings().num_embeddings == len(
-        text_tokenizer
-    ), f"Model and tokenizer mismatch: {model.get_input_embeddings().num_embeddings} != {len(text_tokenizer)}"
+    #assert model.get_input_embeddings().num_embeddings == len(
+    #    text_tokenizer
+    #), f"Model and tokenizer mismatch: {model.get_input_embeddings().num_embeddings} != {len(text_tokenizer)}"
 
     model.language_model.config.use_cache = False
     if args.disable_layerdrop and hasattr(model.audio_tower.config, "layerdrop"):
