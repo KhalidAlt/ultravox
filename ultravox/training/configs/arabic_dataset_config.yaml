@@ -11,7 +11,7 @@ loss_config:
 train_sets:
   - name: librispeech-clean-continuation
   - name: librispeech-other-continuation
-  - name: commonvoice-en-continuation
+  - name: commonvoice-ar
 
 # Temporarily remove heysquad_human from val_sets as it causes the training to fail.
 val_sets:
