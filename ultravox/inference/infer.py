@@ -140,33 +140,17 @@ class LocalInference(base.VoiceInference):
             self.tokenizer, skip_prompt=True, skip_special_tokens=True
         )
 
-        def thunk(f: futures.Future):
-            result = self._generate(
-                inputs, max_tokens, temperature, streamer, self.past_key_values
-            )
-            f.set_result(result)
-
-        future: futures.Future[transformers.GenerateDecoderOnlyOutput] = (
-            futures.Future()
-        )
-        thread = threading.Thread(target=thunk, args=(future,))
-        thread.start()
-        output_text = ""
-        output_token_len = 0
-        for chunk in streamer:
-            if chunk:
-                output_text += chunk
-                output_token_len += 1
-                yield base.InferenceChunk(chunk)
-        thread.join()
-        output = future.result()
-        if self.conversation_mode:
-            audio_token_len = inputs.get("audio_token_len", [0])[0]
-            past_messages = self._build_past_messages(
-                extended_sample.messages, audio_token_len, output_text
-            )
-            self.update_conversation(past_messages, output.past_key_values)
-        yield base.InferenceStats(input_tokens, output_token_len)
+    inputs = self._dataproc(extended_sample)
+    streamer = transformers.TextIteratorStreamer(...)
+    
+    # Run generation in a thread managed by Gradio
+    thread = threading.Thread(target=self.model.generate, kwargs={**inputs, "streamer": streamer})
+    thread.start()
+    
+    # Yield chunks directly (Gradio handles streaming)
+    for chunk in streamer:
+        yield chunk
+    thread.join()
 
     def _dataproc(self, sample: datasets.VoiceSample):
         text_input = self.tokenizer.apply_chat_template(
