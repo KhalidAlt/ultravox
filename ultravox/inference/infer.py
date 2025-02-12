@@ -152,41 +152,41 @@ class LocalInference(base.VoiceInference):
         yield chunk
     thread.join()
 
-    def _dataproc(self, sample: datasets.VoiceSample):
-        text_input = self.tokenizer.apply_chat_template(
-            sample.messages, add_generation_prompt=True, tokenize=False
-        )
-        if sample.audio is not None:
-            audio = sample.audio
-            sample_rate = sample.sample_rate
-            # Normalize audio to float32.
-            if audio.dtype == np.int16:
-                audio = audio / np.float32(32768.0)
-            if audio.dtype not in [np.float64, np.float32]:
-                raise ValueError("Audio must be float64 or float32 or int16")
+        def _dataproc(self, sample: datasets.VoiceSample):
+            text_input = self.tokenizer.apply_chat_template(
+                sample.messages, add_generation_prompt=True, tokenize=False
+            )
+            if sample.audio is not None:
+                audio = sample.audio
+                sample_rate = sample.sample_rate
+                # Normalize audio to float32.
+                if audio.dtype == np.int16:
+                    audio = audio / np.float32(32768.0)
+                if audio.dtype not in [np.float64, np.float32]:
+                    raise ValueError("Audio must be float64 or float32 or int16")
 
-            # Convert to tensor, resampling to 16kHz if needed.
-            if sample_rate != SAMPLE_RATE:
-                audio = librosa.resample(
-                    audio, orig_sr=sample_rate, target_sr=SAMPLE_RATE
-                )
-            audio_input = torch.from_numpy(audio)
-            # Squeeze from [1, T] to [T] if needed.
-            if sample.audio.ndim == 2:
-                audio_input = audio_input.squeeze(0)
-        else:
-            audio_input = None
+                # Convert to tensor, resampling to 16kHz if needed.
+                if sample_rate != SAMPLE_RATE:
+                    audio = librosa.resample(
+                        audio, orig_sr=sample_rate, target_sr=SAMPLE_RATE
+                    )
+                audio_input = torch.from_numpy(audio)
+                # Squeeze from [1, T] to [T] if needed.
+                if sample.audio.ndim == 2:
+                    audio_input = audio_input.squeeze(0)
+            else:
+                audio_input = None
 
-        inputs = self.processor(
-            audio=audio_input,
-            text=text_input,
-            return_tensors="pt",
-            sampling_rate=SAMPLE_RATE,
-        )
-        inputs = {k: v.to(self.model.device) for k, v in inputs.items()}
-        if "audio_values" in inputs:
-            inputs["audio_values"] = inputs["audio_values"].to(dtype=self.dtype)
-        return inputs
+            inputs = self.processor(
+                audio=audio_input,
+                text=text_input,
+                return_tensors="pt",
+                sampling_rate=SAMPLE_RATE,
+            )
+            inputs = {k: v.to(self.model.device) for k, v in inputs.items()}
+            if "audio_values" in inputs:
+                inputs["audio_values"] = inputs["audio_values"].to(dtype=self.dtype)
+            return inputs
 
     @torch.inference_mode()
     def _generate(

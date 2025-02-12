@@ -9,8 +9,8 @@ loss_config:
   loss_function: "KL_Divergence"
 
 train_sets:
-  - name: librispeech-clean-continuation
-  - name: librispeech-other-continuation
+  - name: commonvoice-en-continuation
+  - name: yt_v0
   - name: commonvoice-ar
 
 # Temporarily remove heysquad_human from val_sets as it causes the training to fail.
