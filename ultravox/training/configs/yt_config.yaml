@@ -10,6 +10,7 @@ loss_config:
 
 train_sets:
   - name: commonvoice-en-continuation
+  - name: yt_v0-ar-continuation
   - name: commonvoice-ar
 
 val_sets:
