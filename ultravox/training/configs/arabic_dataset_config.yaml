@@ -10,14 +10,10 @@ loss_config:
 
 train_sets:
   - name: commonvoice-en-continuation
-  - name: yt_v0
+  - name: yt_v0-ar-continuation
   - name: commonvoice-ar
 
-# Temporarily remove heysquad_human from val_sets as it causes the training to fail.
-val_sets:
-  - name: covost2-en-de
-  - name: covost2-zh-en
-  - name: peoplespeech-clean-transcription
 
 batch_size: 24
 max_steps: 14400 # x8x24 = 2,764,800
+

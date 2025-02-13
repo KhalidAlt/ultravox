@@ -10,7 +10,6 @@ YT_BASE_CONFIG = types.DatasetConfig(
 YT_AR_CONFIG = types.DatasetConfig(
     name="yt_v0-ar",
     base="yt_v0",
-    subset="ar",
     splits=[
         types.DatasetSplitConfig(name="train", num_samples=5003),
         types.DatasetSplitConfig(name="validation", num_samples=264),
