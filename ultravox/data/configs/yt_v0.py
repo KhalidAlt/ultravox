@@ -2,7 +2,7 @@ from ultravox.data import types
 
 YT_BASE_CONFIG = types.DatasetConfig(
     name="yt_v0",
-    path="fixie-ai/common_voice_17_0",
+    path="SynthiaLab/yt_v0",
     transcript_template="{{sentence}}",
     assistant_template="{{sentence}}",
 )
@@ -12,7 +12,8 @@ YT_AR_CONFIG = types.DatasetConfig(
     base="yt_v0",
     subset="ar",
     splits=[
-        types.DatasetSplitConfig(name="train", num_samples=5523),
+        types.DatasetSplitConfig(name="train", num_samples=5003),
+        types.DatasetSplitConfig(name="validation", num_samples=264),
 
     ],
 )
@@ -37,3 +38,4 @@ configs = [
     YT_AR_TRANS_CONFIG,
     YT_AR_CONT_CONFIG,
 ]
+
