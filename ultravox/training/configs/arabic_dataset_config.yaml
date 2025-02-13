@@ -1,6 +1,6 @@
 # SLM with ultravox & llama3.1, trained wtih knowledge distillation.
 # Make sure to accept the license agreement on huggingface hub
-text_model: "FreedomIntelligence/AceGPT-v2-8B-Chat"
+text_model: "asas-ai/AceGPT-v2-8b-chat"
 audio_model: "arbml/whisper-medium-ar"
 output_dir: "/tmp/model_checkpints"
 
@@ -13,7 +13,11 @@ train_sets:
   - name: yt_v0-ar-continuation
   - name: commonvoice-ar
 
+val_sets:
+  - name: peoplespeech-clean-transcription
 
+  
 batch_size: 24
 max_steps: 14400 # x8x24 = 2,764,800
+
 
